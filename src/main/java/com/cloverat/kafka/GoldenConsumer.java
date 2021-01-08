@@ -5,6 +5,7 @@ import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Component
 @Slf4j
+@PropertySource({"classpath:kafkaConfig.properties"})
 public class GoldenConsumer implements Runnable {
 
     @Value("${kafka.consumer.topic.user-visit-record}")

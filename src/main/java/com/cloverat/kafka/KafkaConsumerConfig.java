@@ -4,6 +4,7 @@ import java.util.Properties;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 /**
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Component;
  * @author cloverat 2020/12/25
  */
 @Component
+@PropertySource({"classpath:kafkaConfig.properties"})
 public class KafkaConsumerConfig {
 
     @Value("${kafka.consumer.bootstrap-servers}")
