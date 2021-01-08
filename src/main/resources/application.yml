@@ -1,0 +1,9 @@
+server:
+  port: 8081
+
+#logback:
+#  appname: KafkaTest
+#  logdir: D://
+#
+logging:
+  config: classpath:logback-spring.xml
