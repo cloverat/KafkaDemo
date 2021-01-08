@@ -1,7 +1,5 @@
 package com.cloverat.kafka;
 
-import javax.annotation.PostConstruct;
-
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
@@ -18,33 +16,41 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Component
 @Slf4j
-public class GoldenConsumer {
+public class GoldenConsumer implements Runnable {
 
     @Value("${kafka.consumer.topic.user-visit-record}")
     private String userVisitRecordTopic;
-    @Autowired
-    private KafkaConsumerCentre kafkaConsumerCentre;
+    @Value("${kafka.consumer.poll-timeout}")
+    private Integer pollTimeout;
 
-    @PostConstruct
+    @Autowired
+    private KafkaConsumerCentre kafkaConsumerCenter;
+
+    @Override
     public void run() {
-        KafkaConsumer<String, String> consumer = kafkaConsumerCentre.initConsumer(userVisitRecordTopic);
-        log.info("---------开始kafka消费---------");
+        KafkaConsumer<String, String> consumer = kafkaConsumerCenter.initConsumer(userVisitRecordTopic);
+        log.debug("开始kafka消费");
 
         while (true) {
-            ConsumerRecords<String, String> consumerRecords = consumer.poll(100);
-            if (null != consumerRecords) {
-                for (ConsumerRecord<String, String> consumerData : consumerRecords) {
-                    log.info("offset = {}, key = {}, value = {}", consumerData.offset(), consumerData.key(),
-                        consumerData.value());
+            try {
+                ConsumerRecords<String, String> consumerRecords = consumer.poll(pollTimeout);
+                if (null != consumerRecords) {
+                    for (ConsumerRecord<String, String> consumerData : consumerRecords) {
+                        log.debug("offset = {}, key = {}, value = {}", consumerData.offset(), consumerData.key(),
+                            consumerData.value());
+                    }
+                } else {
+                    log.debug("kafka无消费消息");
+                    try {
+                        Thread.sleep(1000);
+                    } catch (Exception e) {
+                        log.error("kafka消费中断异常");
+                        log.error(e.getMessage());
+                    }
                 }
-            } else {
-                log.debug("---------kafka无消费消息---------");
-                try {
-                    Thread.sleep(1000);
-                } catch (Exception e) {
-                    log.error("---------kafka消费异常中断---------");
-                    log.error(e.getMessage());
-                }
+            } catch (Exception e) {
+                log.error("kafka消费出现异常");
+                log.error(e.getMessage());
             }
         }
     }

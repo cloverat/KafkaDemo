@@ -1,11 +1,12 @@
 package com.cloverat.kafka;
 
-import lombok.extern.slf4j.Slf4j;
+import java.util.Collections;
+
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * kafka消费者中心
