@@ -38,7 +38,7 @@ public class GoldenConsumer implements Runnable {
                 ConsumerRecords<String, String> consumerRecords = consumer.poll(pollTimeout);
                 if (null != consumerRecords) {
                     for (ConsumerRecord<String, String> consumerData : consumerRecords) {
-                        log.debug("offset = {}, key = {}, value = {}", consumerData.offset(), consumerData.key(),
+                        log.info("offset = {}, key = {}, value = {}", consumerData.offset(), consumerData.key(),
                             consumerData.value());
                     }
                 } else {

@@ -33,4 +33,6 @@ public class KafkaConsumerCentre {
         consumer.subscribe(Collections.singletonList(topic));
         return consumer;
     }
+
+
 }
