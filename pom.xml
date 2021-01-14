@@ -21,8 +21,8 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
         <spring-cloud.version>Finchley.RELEASE</spring-cloud.version>
-        <kafka-clients.version>0.10.2.0</kafka-clients.version>
-        <kafka_2.11.version>0.10.2.0</kafka_2.11.version>
+        <kafka-clients.version>0.9.0.1</kafka-clients.version>
+        <kafka_2.11.version>0.9.0.1</kafka_2.11.version>
     </properties>
 
     <dependencyManagement>

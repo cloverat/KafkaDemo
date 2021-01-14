@@ -14,7 +14,7 @@ import java.util.Collections;
  */
 @Component
 @Slf4j
-public class KafkaConsumerCentre {
+public class KafkaConsumerCenter {
 
     @Autowired
     private KafkaConsumerConfig kafkaConsumerConfig;

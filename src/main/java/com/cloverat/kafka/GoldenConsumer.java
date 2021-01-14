@@ -1,12 +1,11 @@
 package com.cloverat.kafka;
 
-import javax.annotation.PostConstruct;
-
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 import lombok.extern.slf4j.Slf4j;
@@ -18,20 +17,23 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Component
 @Slf4j
-public class GoldenConsumer {
+@PropertySource("classpath:kafkaConfig.properties")
+public class GoldenConsumer implements Runnable {
 
-    @Value("${kafka.consumer.topic.user-visit-record}")
+    @Value("${kafka.consumer.topic.xxx}")
     private String userVisitRecordTopic;
+    @Value("${kafka.consumer.poll-timeout}")
+    private Long pollTimeout;
     @Autowired
-    private KafkaConsumerCentre kafkaConsumerCentre;
+    private KafkaConsumerCenter kafkaConsumerCenter;
 
-    @PostConstruct
+    @Override
     public void run() {
-        KafkaConsumer<String, String> consumer = kafkaConsumerCentre.initConsumer(userVisitRecordTopic);
+        KafkaConsumer<String, String> consumer = kafkaConsumerCenter.initConsumer(userVisitRecordTopic);
         log.info("---------开始kafka消费---------");
 
         while (true) {
-            ConsumerRecords<String, String> consumerRecords = consumer.poll(100);
+            ConsumerRecords<String, String> consumerRecords = consumer.poll(pollTimeout);
             if (null != consumerRecords) {
                 for (ConsumerRecord<String, String> consumerData : consumerRecords) {
                     log.info("offset = {}, key = {}, value = {}", consumerData.offset(), consumerData.key(),
